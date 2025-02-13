@@ -1,0 +1,52 @@
+{% extends 'contact_form/base.html' %}
+
+{% block title %}Поделиться сообщением{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Поделиться сообщением</h3>
+            </div>
+            <div class="card-body">
+                <div class="message-details mb-4">
+                    <h4>{{ contact.name }}</h4>
+                    <p class="text-muted">{{ contact.created_at|date:"d.m.Y H:i" }}</p>
+                    <p>{{ contact.message }}</p>
+                    {% if contact.attachment %}
+                        <img src="{{ contact.attachment.url }}" alt="Attachment" class="img-fluid mb-3">
+                    {% endif %}
+                </div>
+
+                <div class="sharing-options">
+                    <h5 class="mb-3">Поделиться через:</h5>
+                    
+                    <form method="post" action="{% url 'contact-share-email' contact.id %}" class="mb-3">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="email" name="email" class="form-control" placeholder="Email получателя" required>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                        </div>
+                    </form>
+
+                    <div class="social-sharing d-flex gap-2">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                           target="_blank" class="btn btn-primary">
+                            Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text=Check out this message"
+                           target="_blank" class="btn btn-info">
+                            Twitter
+                        </a>
+                        <a href="https://telegram.me/share/url?url={{ request.build_absolute_uri }}"
+                           target="_blank" class="btn btn-primary">
+                            Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
